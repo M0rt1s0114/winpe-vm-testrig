@@ -59,6 +59,34 @@ oscdimg -bootdata:2#p0,e,b"<iso>\boot\etfsboot.com"#pEF,e,b"<efisys.bin>" ^
 
 见 README「结果通道 / 串口」。要 `PortName` 写入 + 重启设备之后才可用。
 
+### 6.1 `pnputil /restart-device` 返回 ≠ COM1 已可用
+
+设备名是**异步**出现的。重启设备之后立刻写 `> COM1` 不会报错 ——
+cmd 会**静默创建一个名为 `COM1` 的文件**吞掉输出。所以必须轮询
+`HKLM\HARDWARE\DEVICEMAP\SERIALCOMM`,确认里面出现 `COM1` 再继续。
+见 `payload/serial-fix.cmd`。
+
+### 6.2 第一次写入会丢
+
+VMware 是**懒打开**串口输出文件的。实测开机后头一到两次 guest 写入
+凭空消失,而后面全部正常。修法是先发几条"预热"写入再开始正式输出:
+
+```cmd
+echo serial-warmup > COM1
+ping -n 3 127.0.0.1 >nul
+echo serial-warmup > COM1
+```
+
+消费方按标记切段时,预热噪声落在标记之外,不影响解析。
+
+## 7. `timeout` 在两种情况下都不能用
+
+- WinPE 的 cmd 里 `timeout /t` **不等待**
+- 宿主机上,如果脚本的 stdin 被重定向(例如从管道调用),
+  `timeout` 直接报 `Input redirection is not supported` 并立即退出
+
+两处都改用 `ping -n N 127.0.0.1 >nul` 计时。
+
 ## 7. 让 PE 主动"分屏循环"打印
 
 PE 侧脚本按 `cls` + 打印一块 + 等待 的节奏循环,宿主机每 10~15 秒截一次屏,

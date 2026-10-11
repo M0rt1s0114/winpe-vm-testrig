@@ -23,17 +23,19 @@ del /q "%RIG%\vm\serial0.log" 2>nul
 del /q "%RIG%\vm\test.nvram" 2>nul
 
 "%VMRUN%" -T ws stop "%VMX%" hard >nul 2>&1
-timeout /t 5 /nobreak >nul
+rem ping, not timeout: timeout needs a console handle and fails when stdin is
+rem redirected (which is common when a script is invoked from a pipeline).
+ping -n 6 127.0.0.1 >nul
 "%VMRUN%" -T ws start "%VMX%" nogui
 if errorlevel 1 (
   echo [ERR] failed to start VM
   exit /b 1
 )
 
-timeout /t %WAIT% /nobreak >nul
+ping -n %WAIT% 127.0.0.1 >nul
 for /l %%I in (1,1,%COUNT%) do (
   "%VMCLI%" "%VMX%" MKS captureScreenshot "%SHOTS%\shot%%I.png"
-  timeout /t %INTERVAL% /nobreak >nul
+  ping -n %INTERVAL% 127.0.0.1 >nul
 )
 
 echo [OK] screenshots in %SHOTS%
