@@ -1,0 +1,11 @@
+/config.cmd
+/shots/
+/build/
+/iso/
+/vm/*.nvram
+/vm/*.log
+/vm/*.vmem*
+/vm/*.vmsd
+/vm/*.vmxf
+/vm/*.scoreboard
+nohup.out

@@ -1,0 +1,38 @@
+.encoding = "windows-1252"
+config.version = "8"
+virtualHW.version = "21"
+displayName = "PETest"
+guestOS = "windows9-64"
+memsize = "4096"
+numvcpus = "2"
+
+# Use "bios" for the traditional etfsboot.com path, "efi" for the efisys.bin path.
+firmware = "bios"
+nvram = "test.nvram"
+
+powerType.powerOff = "soft"
+powerType.reset = "soft"
+
+ide1:0.present = "TRUE"
+ide1:0.fileName = "D:\pe-testrig\test.iso"
+ide1:0.deviceType = "cdrom-image"
+ide1:0.startConnected = "TRUE"
+
+# Serial port written straight to a host file. Delete the file before each
+# boot: if it already exists VMware asks replace-or-append, and in headless
+# mode that question is auto-answered.
+serial0.present = "TRUE"
+serial0.fileType = "file"
+serial0.fileName = "D:\pe-testrig\vm\serial0.log"
+serial0.autodetect = "FALSE"
+serial0.tryNoRxLoss = "FALSE"
+
+floppy0.present = "FALSE"
+ethernet0.present = "FALSE"
+usb.present = "FALSE"
+ehci.present = "FALSE"
+usb_xhci.present = "FALSE"
+sound.present = "FALSE"
+mks.enable3d = "FALSE"
+tools.syncTime = "FALSE"
+svga.autodetect = "TRUE"

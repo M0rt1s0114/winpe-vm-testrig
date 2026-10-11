@@ -1,0 +1,16 @@
+@echo off
+rem Copy this file to config.cmd and adjust the paths for your machine.
+
+rem Working directory for ISO scratch space, WIM copies, VM files.
+set "RIG=D:\pe-testrig"
+
+rem Your PE image (WIM). It is copied, never modified in place.
+set "PESRC_WIM=D:\path\to\your-pe.wim"
+
+set "WIMLIB=D:\tools\wimlib-imagex.exe"
+set "OSCDIMG=C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\oscdimg.exe"
+set "PYTHON=python"
+
+set "VMX=%RIG%\vm\test.vmx"
+set "VMRUN=C:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe"
+set "VMCLI=C:\Program Files (x86)\VMware\VMware Workstation\vmcli.exe"
